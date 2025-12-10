@@ -2,9 +2,7 @@ import { CheerioAPI } from 'cheerio';
 import {
     PlaywrightCrawler,
     RequestQueue,
-    Dataset,
     log,
-    DatasetContent,
 } from 'crawlee';
 import z from 'zod';
 import { JSDOM } from 'jsdom';
@@ -45,7 +43,7 @@ function extractMainContent(htmlString: string): { title: string; content: strin
     return null;
 }
 
-export async function scrape(urls: string[]) {
+export async function scrapeAndStore(urls: string[]) {
     log.setLevel(log.LEVELS.INFO);
 
     const requestQueue = await RequestQueue.open();

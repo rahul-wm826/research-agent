@@ -1,0 +1,39 @@
+ENTERPRISE RESEARCH AGENT WORKFLOW STEPS (LANGRAPH NODES)
+
+00. userInput: Initial State: User provides the complex research topic or query.
+
+I. QUERY AND PRE-CHECK PHASE
+
+01. queryNode: Query Decomposition: Decomposes the single user query into 3-5 distinct, high-context sub-queries.
+02. routerNode: ROUTER: Triage/Validation. Checks the conversation history and initial query intent.
+03. memoryCheckNode: Guardrail: Checks dedicated Semantic Cache (Vector DB, high scoreThreshold ~0.95) and Blacklist for recent or restricted topics.
+
+II. DATA ACQUISITION PHASE
+
+04. searchNode: Google Search: Executes a Google search for each decomposed sub-query (can be parallelized).
+05. searchValidationNode: Validation: Filters out low-quality/malicious/irrelevant domains (e.g., paywalls, forums, malicious sites) based on a configurable list.
+06. siteRelevanceNode: URL Triage: Assesses the remaining URLs for content relevance based on the original user topic, selecting the top ~10 candidates for scraping.
+07. scrapeAndStoreNode: Data Acquisition: Scrapes and cleans the content from the selected URLs (e.g., ad and boilerplate removal).
+
+III. RETRIEVAL AND REFINEMENT PHASE
+
+08. vectorSearchNode: Retrieval: Uses the decomposed queries to retrieve the most relevant content chunks from the new context (balanced scoreThreshold ~0.78).
+09. contextRefinementNode: Refinement: Uses an LLM to summarize/distill the retrieved noisy chunks into crisp, fact-dense paragraphs, optimizing them for the final synthesis.
+
+IV. SYNTHESIS AND QUALITY CONTROL PHASE (LOOP)
+
+10. aggregateNode: Synthesis: Uses the Aggregation Engine System Prompt to combine all refined context into the final report structure.
+11. factCheckNode: Guardrail/Quality Check: Uses a separate, highly capable LLM or tool to check a few critical claims made in the synthesis against real-time data.
+12. outputRouter: Router: Checks the fact-check result. Routes to 'FINAL_OUTPUT' if facts pass, or 'REMEDIATION' if facts fail.
+13. remediationNode: Remediation: Rewrites the offending section of the report based on the error report from factCheckNode and loops back to 12.
+
+V. FINAL DELIVERY PHASE
+
+14. finalOutputNode: Final Delivery: Provides the synthesized, verified report to the user.
+
+EDGE CONDITIONS (FOR CLARITY)
+
+- Edge from 02 (routerNode): Conditional to 03 (memoryCheckNode) or 04 (searchNode) or 14 (finalOutputNode for simple QANDA).
+- Edge from 03 (memoryCheckNode): Conditional to 11 (aggregateNode, if cache hit) or 04 (searchNode, if cache miss).
+- Edge from 13 (outputRouter): Conditional to 14 (finalOutputNode) or 14 (remediationNode).
+- Edge from 14 (remediationNode): Static to 12 (factCheckNode) to force re-verification.

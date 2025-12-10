@@ -5,7 +5,8 @@ import { llm } from "../llm.js";
 import { Command } from "@langchain/langgraph";
 
 export const routerNode = async (state: z.infer<typeof State>) => {
-    const recentMessages = state.messages.slice(-5);
+    const stateMessages = state.messages || [];
+    const recentMessages = stateMessages.length > 5 ? stateMessages.slice(-5) : stateMessages;
 
     const message = [
         new SystemMessage(`
@@ -27,14 +28,28 @@ export const routerNode = async (state: z.infer<typeof State>) => {
 
     const response = await llmWithStructureOutput.invoke(message);
 
+    const updatedMessages = [
+        ...state.messages || [],
+        new HumanMessage(state.userInput)
+    ];
+
     if (response.intent === 'NEW_RESEARCH') {
         return new Command({
-            goto: 'searchNode'
+            update: {
+                messages: updatedMessages
+            },
+            goto: 'queryNode',
         });
     }
     else if (response.intent === "CONTINUATION") {
         return new Command({
+            update: {
+                messages: updatedMessages
+            },
             goto: 'memoryCheckNode'
         });
     }
+    return new Command({
+        goto: 'simpleLlmNode'
+    });
 }

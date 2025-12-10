@@ -1,50 +1,49 @@
 {
-  "requestsFinished": 2,
-  "requestsFailed": 1,
-  "requestsRetries": 1,
-  "requestsFailedPerMinute": 1,
-  "requestsFinishedPerMinute": 4,
-  "requestMinDurationMillis": 7480,
-  "requestMaxDurationMillis": 12997,
-  "requestTotalFailedDurationMillis": 1271,
-  "requestTotalFinishedDurationMillis": 20477,
-  "crawlerStartedAt": "2025-12-10T08:17:37.201Z",
-  "crawlerFinishedAt": "2025-12-10T08:18:08.821Z",
-  "statsPersistedAt": "2025-12-10T08:18:08.821Z",
-  "crawlerRuntimeMillis": 32071,
-  "crawlerLastStartTimestamp": 1765354656750,
+  "requestsFinished": 0,
+  "requestsFailed": 3,
+  "requestsRetries": 3,
+  "requestsFailedPerMinute": 2,
+  "requestsFinishedPerMinute": 0,
+  "requestMinDurationMillis": null,
+  "requestMaxDurationMillis": 0,
+  "requestTotalFailedDurationMillis": 30192,
+  "requestTotalFinishedDurationMillis": 0,
+  "crawlerStartedAt": "2025-12-10T13:37:47.579Z",
+  "crawlerFinishedAt": "2025-12-10T13:39:00.065Z",
+  "statsPersistedAt": "2025-12-10T13:39:00.065Z",
+  "crawlerRuntimeMillis": 73095,
+  "crawlerLastStartTimestamp": 1765373866970,
   "requestRetryHistogram": [
-    2,
     null,
     null,
-    1
+    null,
+    3
   ],
   "statsId": 0,
-  "requestAvgFailedDurationMillis": 1271,
-  "requestAvgFinishedDurationMillis": 10239,
-  "requestTotalDurationMillis": 21748,
+  "requestAvgFailedDurationMillis": 10064,
+  "requestAvgFinishedDurationMillis": null,
+  "requestTotalDurationMillis": 30192,
   "requestsTotal": 3,
   "requestsWithStatusCode": {
-    "200": 2,
-    "403": 4
+    "200": 12
   },
   "errors": {
-    "D:\\Rahul\\Crawler\\node_modules\\@crawlee\\src\\internals\\basic-crawler.ts:1353:19": {
+    "D:\\Rahul\\Crawler\\src\\tools\\rag.ts:33:5": {
       "missing error code": {
         "Error": {
-          "Request blocked - received 403 status code.": {
-            "count": 1
+          "400 Bad Request: Wrong input: Not existing vector name error: ": {
+            "count": 3
           }
         }
       }
     }
   },
   "retryErrors": {
-    "D:\\Rahul\\Crawler\\node_modules\\@crawlee\\src\\internals\\basic-crawler.ts:1353:19": {
+    "D:\\Rahul\\Crawler\\src\\tools\\rag.ts:33:5": {
       "missing error code": {
         "Error": {
-          "Request blocked - received 403 status code.": {
-            "count": 3
+          "400 Bad Request: Wrong input: Not existing vector name error: ": {
+            "count": 9
           }
         }
       }

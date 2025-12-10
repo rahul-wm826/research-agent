@@ -36,17 +36,12 @@ export const aggregatorNode = async (state: z.infer<typeof State>): Promise<Part
         `),
     ];
 
-    const llmWithStructureOutput = llm.withStructuredOutput(z.object({
-        report: z.string(),
-    }));
+    const response = await llm.invoke(messages);
 
-    const response = await llmWithStructureOutput.invoke(messages);
-
-    await fs.writeFile('report.txt', response.report);
-
+    await fs.writeFile('report.txt', response.text);
     console.log('Report saved to report.txt');
 
     return {
-        report: response.report
+        report: response.text
     };
 }

@@ -4,8 +4,6 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { llm } from "../llm.js";
 
 export const queryNode = async (state: z.infer<typeof State>): Promise<Partial<z.infer<typeof State>>> => {
-    state.messages.push(new HumanMessage(state.userInput));
-
     const messages = [
         new SystemMessage(`
             You are an expert **Query Deconstruction and Expansion Engine**. Your task is to analyze a single, complex user query and decompose it into **three (3) to five (5) distinct, independent, and highly detailed research sub-queries**.

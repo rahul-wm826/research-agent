@@ -5,7 +5,7 @@ import { retrieveData } from "../tools/rag.js";
 export const vectorSearchNode = async (state: z.infer<typeof State>): Promise<Partial<z.infer<typeof State>>> => {
     const queries = state.queries;
 
-    const results = await Promise.all(queries.map((query: string) => retrieveData(query)));
+    const results = await Promise.all(queries.map((query: string) => retrieveData(query, 0.78)));
     const flattenedResults = results.flatMap(result => result);
 
     return {

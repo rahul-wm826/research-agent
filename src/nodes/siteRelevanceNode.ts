@@ -3,19 +3,19 @@ import { State } from "../Schemas/State.js";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { llm } from "../llm.js";
 
-export const urlRelevanceNode = async (state: z.infer<typeof State>): Promise<Partial<z.infer<typeof State>>> => {
+export const siteRelevanceNode = async (state: z.infer<typeof State>): Promise<Partial<z.infer<typeof State>>> => {
     const searchResult = state.searchResult;
 
     const messages = [
         new SystemMessage(`
-            You are a URL relevance evaluator.
-            **Task:** Evaluate the relevance of the URLs in the search result to the user's query. Select only 3 relevant ones.
-            **Constraint:** URLs MUST be relevant to the user's query.
+            You are a Website relevance evaluator.
+            **Task:** Evaluate the relevance of the Website in the search result to the user's query. Select only 3 relevant ones.
+            **Constraint:** Websites MUST be relevant to the user's query.
 
-            **Output MUST be a JSON array of strings of length 10 ONLY.**
+            **Output MUST be a JSON array of urls strings of length 10 ONLY.**
 
             Example Output:
-            ["first URL", "second URL", "third URL"]
+            ["first url", "second url", "third url"]
         `),
         new HumanMessage(`
             User Query: ${state.userInput}
