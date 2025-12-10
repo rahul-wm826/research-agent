@@ -1,0 +1,9 @@
+{
+	"id": "4gZOFigeVrfIv9c",
+	"json": "{\"id\":\"4gZOFigeVrfIv9c\",\"url\":\"https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain\",\"loadedUrl\":\"https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain\",\"uniqueKey\":\"https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-12-10T08:17:54.728Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain",
+	"url": "https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain"
+}
