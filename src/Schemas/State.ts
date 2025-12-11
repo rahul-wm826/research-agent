@@ -11,6 +11,7 @@ export const State = z.object({
     relevantUrls: z.array(z.string()),
     searchResult: OrganicResultSchema.array(),
     researchedContent: VectorDBSchema.array(),
+    refinedContent: z.string(),
     claims: z.array(z.string()),
     factCheckSearch: z.array(FactCheckSearchSchema),
     verdicts: Verdicts.array(),

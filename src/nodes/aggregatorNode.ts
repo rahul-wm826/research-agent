@@ -6,14 +6,14 @@ import fs from "node:fs/promises";
 
 export const aggregatorNode = async (state: z.infer<typeof State>): Promise<Partial<z.infer<typeof State>>> => {
     const messages = [
-        new SystemMessage(`
+        new HumanMessage(`
             You are an expert **Aggregation and Synthesis Engine**. Your task is to review the research content provided in the JSON array below, identify key findings, eliminate all redundancy, and structure the information into a single, crisp, unified, coherent, and professional research report.
 
             **Report Constraints:**
             1.  **Audience:** **[Target Audience, e.g., Senior Management, Technical Team, Academic Peers]**
             2.  **Focus:** **[Primary Research Topic]**
             3.  **Format:** The entire output must be formatted using **Markdown**.
-            4.  **Length:** The report must be concise and crisp, aiming for a total length of approximately **1,500 to 2,000 words**.
+            4.  **Length:** The report must be concise and crisp, aiming for a total length of approximately **600 to 800 words** (roughly 800-1100 tokens).
 
             **Report Structure (Must Include):**
             * **Executive Summary:** A brief, high-level overview of the most critical findings and the main conclusion.
@@ -24,24 +24,21 @@ export const aggregatorNode = async (state: z.infer<typeof State>): Promise<Part
             * **Challenges and Risks:** Summarize any obstacles, contradictions, or risks identified in the source material.
             * **Conclusion & Recommendations:** A summary of the synthesis and specific, actionable steps for the **[Target Audience]** based on the consolidated evidence.
 
-            **Input Content:**
-            Review the following array of research documents.
-
-            ${JSON.stringify(state.researchedContent)}
-        `),
-        new HumanMessage(`
             User Query: ${state.userInput}
             Below is the researched content:
-            ${JSON.stringify(state.researchedContent)}
+            ${state.refinedContent}
         `),
     ];
 
-    const response = await llm.invoke(messages);
+    const llmWithStructuredOutput = llm.withStructuredOutput(z.object({
+        report: z.string(),
+    }));
+    const response = await llmWithStructuredOutput.invoke(messages);
 
-    await fs.writeFile('report.txt', response.text);
+    await fs.writeFile('report.txt', response.report);
     console.log('Report saved to report.txt');
 
     return {
-        report: response.text
+        report: response.report
     };
 }

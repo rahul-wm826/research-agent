@@ -1,0 +1,9 @@
+{
+	"id": "lj4NogoFDUFG7mH",
+	"json": "{\"id\":\"lj4NogoFDUFG7mH\",\"url\":\"http://hirc.botanic.hr/EpiSalvia/En/en-species.htm\",\"loadedUrl\":\"http://hirc.botanic.hr/EpiSalvia/En/en-species.htm\",\"uniqueKey\":\"http://hirc.botanic.hr/EpiSalvia/En/en-species.htm\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-12-11T10:20:15.930Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "http://hirc.botanic.hr/EpiSalvia/En/en-species.htm",
+	"url": "http://hirc.botanic.hr/EpiSalvia/En/en-species.htm"
+}

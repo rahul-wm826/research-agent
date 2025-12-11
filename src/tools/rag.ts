@@ -12,25 +12,29 @@ const embeddings = new GoogleGenerativeAIEmbeddings({
 
 const vectorStore = new QdrantVectorStore(embeddings, {
     url: process.env.QDRANT_URL,
-    collectionName: "research",
     apiKey: process.env.QDRANT_API_KEY,
+    collectionName: "research-content",
 });
 
 export async function storeData(url: string, text: string) {
-    const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 1000,
-        chunkOverlap: 200,
-    });
-    const chunks = await textSplitter.splitText(text);
+    try {
+        const textSplitter = new RecursiveCharacterTextSplitter({
+            chunkSize: 1000,
+            chunkOverlap: 200,
+        });
+        const chunks = await textSplitter.splitText(text);
 
-    const documents = chunks.map((chunk) => new Document({
-        pageContent: chunk,
-        metadata: {
-            url,
-        },
-    }));
+        const documents = chunks.map((chunk) => new Document({
+            pageContent: chunk,
+            metadata: {
+                url,
+            },
+        }));
 
-    await vectorStore.addDocuments(documents);
+        await vectorStore.addDocuments(documents);
+    } catch (error) {
+        console.error("Error storing data:", error);
+    }
 }
 
 export const VectorDBSchema = z.object({
@@ -40,16 +44,23 @@ export const VectorDBSchema = z.object({
 export type RetrieveData = z.infer<typeof VectorDBSchema>;
 
 export async function retrieveData(query: string, scoreThreshold: number = 0.75, maxDocs: number = 5): Promise<RetrieveData[]> {
-    const scoreRetriever = new ScoreThresholdRetriever({
-        vectorStore,
-        minSimilarityScore: scoreThreshold,
-        maxK: maxDocs,
-    });
+    try {
 
-    const results = await scoreRetriever.getRelevantDocuments(query);
+        const scoreRetriever = new ScoreThresholdRetriever({
+            vectorStore,
+            minSimilarityScore: scoreThreshold,
+            maxK: maxDocs,
+        });
 
-    return results.map((doc) => ({
-        content: doc.pageContent,
-        url: doc.metadata.url,
-    }));
+        const results = await scoreRetriever.getRelevantDocuments(query);
+
+        return results.map((doc) => ({
+            content: doc.pageContent,
+            url: doc.metadata.url,
+        }));
+    }
+    catch (error) {
+        console.error("Error retrieving data:", error);
+        return [];
+    }
 }

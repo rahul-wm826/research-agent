@@ -14,6 +14,6 @@ export const simpleLlmNode = async (state: z.infer<typeof State>): Promise<Parti
     const response = await llm.invoke(messages);
 
     return {
-        response: response.text
+        report: response.text
     };
 }

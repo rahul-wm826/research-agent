@@ -1,0 +1,9 @@
+{
+	"id": "WWjqfSZ8gdcZRdo",
+	"json": "{\"id\":\"WWjqfSZ8gdcZRdo\",\"url\":\"https://plants.ces.ncsu.edu/plants/salvia/\",\"loadedUrl\":\"https://plants.ces.ncsu.edu/plants/salvia/\",\"uniqueKey\":\"https://plants.ces.ncsu.edu/plants/salvia\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-12-11T10:20:14.972Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://plants.ces.ncsu.edu/plants/salvia",
+	"url": "https://plants.ces.ncsu.edu/plants/salvia/"
+}

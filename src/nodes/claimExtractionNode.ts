@@ -6,22 +6,26 @@ import { llm } from "../llm.js";
 export const claimExtractionNode = async (state: z.infer<typeof State>): Promise<Partial<z.infer<typeof State>>> => {
     const messages = [
         new SystemMessage(`
-            You are a **Critical Claim Extractor**. Your task is to analyze the synthesized research report and isolate the **three (3) most critical, verifiable, and impactful factual claims** (dates, numbers, specific names, or causality statements).
+            You are a **Critical Claim Extractor**. Your sole task is to analyze the provided research content and isolate the **three (3)** most impactful, verifiable, and distinct factual claims.
 
-            **Output Format (STRICT JSON):**
-            You must output a single JSON object containing an array of the three exact claim sentences. Do not include any introductory text, explanation, or markdown formatting outside of the JSON structure.
+            **TASK PRIORITY:**
+            1.  Read and understand the <RESEARCH_REPORT>.
+            2.  Extract the **THREE EXACT SENTENCES** that are the most important factual claims (dates, numbers, specific names).
+            3.  Output **ONLY** the JSON object.
 
-            json
-            {
-                "claims": [
-                    "The first most critical claim sentence.",
-                    "The second most critical claim sentence.",
-                    "The third most critical claim sentence."
-                ]
-            }
+            **CRITICAL CONSTRAINTS:**
+            * **Focus:** Claims MUST be directly verifiable sentences copied from the <RESEARCH_REPORT> block. DO NOT create new sentences or generalize.
+            * **Quantity:** You must provide exactly three claims.
+            * **NO CONSOLIDATION:** This node does **not** consolidate. It extracts and formats.
         `),
         new HumanMessage(`
-            Researched Content: ${state.report}
+            <USER_QUERY>
+            ${state.userInput}
+            </USER_QUERY>
+
+            <RESEARCH_REPORT>
+            ${state.researchedContent}
+            </RESEARCH_REPORT>
         `)
     ];
 

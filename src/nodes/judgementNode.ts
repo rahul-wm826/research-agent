@@ -8,7 +8,7 @@ import { FactCheckSearch } from "./verificationSearchNode.js";
 export const Verdicts = z.object({
     claim: z.string(),
     verificationStatus: z.enum(["TRUE", "FALSE", "UNCLEAR"]),
-    correctionNeeded: z.string().optional(),
+    correctionNeeded: z.string().optional().nullable(),
 });
 
 async function judgeClaim(claim: FactCheckSearch): Promise<z.infer<typeof Verdicts>> {
@@ -41,11 +41,7 @@ async function judgeClaim(claim: FactCheckSearch): Promise<z.infer<typeof Verdic
         `)
     ];
 
-    const llmWithStructureOutput = llm.withStructuredOutput(z.object({
-        claim: z.string(),
-        verificationStatus: z.enum(["TRUE", "FALSE", "UNCLEAR"]),
-        correctionNeeded: z.string().optional(),
-    }));
+    const llmWithStructureOutput = llm.withStructuredOutput(Verdicts);
 
     return await llmWithStructureOutput.invoke(messages);
 }

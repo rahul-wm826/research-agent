@@ -5,32 +5,45 @@ import { llm } from "../llm.js";
 
 export const remediationNode = async (state: z.infer<typeof State>): Promise<Partial<z.infer<typeof State>>> => {
     const messages = [
-        new SystemMessage(`
-            You are a **Report Remediation Specialist**. Your task is to perform targeted, surgical edits on the synthesized research report using a strict set of verification verdicts and corrections provided below.
-
-            Your goal is to correct all claims marked as "FALSE" without altering the report's overall structure, tone, or content beyond the necessary factual substitution.
-
-            **Procedure:**
-            1.  **Surgical Edit:** For every claim marked with "verification_status": "FALSE" in the 'Verification Verdicts' JSON, locate the exact original "claim_text" in the report. **Replace that original claim entirely** with the text provided in the corresponding "correction_needed" field.
-            2.  **Preserve:** Ignore claims marked "TRUE" or "UNCLEAR." Do not modify the report in response to these statuses.
-            3.  **Output Format:** Output **ONLY** the single, revised, corrected version of the full synthesized report. Do not include any JSON, notes, explanation, or conversational text.
-        `),
         new HumanMessage(`
-            Synthesized Report to be Corrected: 
-            ${state.report}
+            You are a strictly procedural text processor. Your task is ONLY to execute the following surgical text replacement operation.
 
-            Verification Verdicts and Corrections:
-            ${state.verdicts}
+            **INPUT DATA:**
+            The input consists of two parts: 
+            1. A full **REPORT** that needs corrections.
+            2. A list of **VERDICTS** (claims, corrections, statuses).
+
+            **THE TASK:**
+            For every claim in the **VERDICTS** list where the status is **"FALSE"**:
+            1. FIND the original "claim_text" in the **REPORT**.
+            2. REPLACE that exact sentence with the text from "correction_needed".
+            3. IGNORE claims marked "TRUE" or "UNCLEAR."
+
+            **OUTPUT RULE:**
+            Output ONLY the single, final, fully revised report text. Do not include any JSON, titles, or conversational text. Output must begin immediately after the final marker.
+
+            --- INPUT START ---
+            
+            **Synthesized Report to be Corrected:**
+            ${JSON.stringify(state.report)}
+
+            **Verification Verdicts and Corrections (Claim, Correction, Verdict):**
+            ${JSON.stringify(state.verdicts)} 
+            
+            --- OUTPUT ONLY THE CORRECTED REPORT TEXT BELOW ---
         `)
     ];
 
-    const response = await llm.invoke(messages);
+    const llmWithStructuredOutput = llm.withStructuredOutput(z.object({
+        report: z.string(),
+    }));
+    const response = await llmWithStructuredOutput.invoke(messages);
 
     return {
-        report: response.text,
+        report: response.report,
         messages: [
             ...state.messages,
-            new SystemMessage(response.text)
+            new SystemMessage(response.report)
         ]
     };
 }   
